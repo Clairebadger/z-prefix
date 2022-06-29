@@ -1,7 +1,7 @@
 import React from 'react'
 const BlogContext = React.createContext({
-    isAuthenticated : null,
-    setIsAuthenticated : () => {}
+    userId : 1,
+    setUserId : ()=>{}
   });
 
   export default BlogContext

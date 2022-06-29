@@ -6,7 +6,7 @@ const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
 const Login = () => {
 
-    let {setIsAuthenticated} = useContext(BlogContext)
+    let {setUserId} = useContext(BlogContext)
     let [input, setInput] = useState({username:"", password:""})
 
     let handleChange = (e) => {
@@ -21,21 +21,23 @@ const Login = () => {
     const handleSubmit = (e) =>{
         
         console.log("working...?")
-        fetch(`${ApiUrl}/login`, {
+        fetch(`${ApiUrl}login`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(input),
         })
         .then(res => {
-            console.log(res)
-            if(res.status ===200){
-                setIsAuthenticated(true)
-                console.log("success")
-            }
-            else{
+            if (res.status !== 200){
                 console.log("not success")
-            }}
-        )
+            }
+            return res
+        })
+        .then(res=>res.json())
+        .then(data => {
+            console.log(data.body)
+            setUserId(data.body)
+            console.log("success")
+        })
         e.preventDefault()
     }
 

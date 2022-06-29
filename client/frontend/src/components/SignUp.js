@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from 'react-router-dom'
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
@@ -64,6 +65,10 @@ const SignUp = () => {
                 </ul>
                 <button className = 'submitButton' type="submit" value="Submit">Submit</button>
             </form>
+            Already signed up? 
+            <Link to="/login">
+                Login Here
+            </Link>
         </>
     )
 }
