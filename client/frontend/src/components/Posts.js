@@ -3,14 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import BlogContext from "./BlogContext";
 import BlogPost from "./BlogPost";
 import './styles/Posts.css'
+import Container from '@mui/material/Button';
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
 const Posts = ({user}) => {
     let [posts, setPosts] = useState([])
     let {userId} = useContext(BlogContext)
-    console.log(userId)
-    console.log(user)
     let getUrl 
     let navigate = useNavigate()
 
@@ -48,11 +47,18 @@ const Posts = ({user}) => {
             {
                 user ? <button onClick={() => handleClick(0)}>Add post</button> : <></>
             }
-            <div className="post-container">
-                {
+            <div className = "post-container">
+                {   
+                    posts.length === 0 ?
+                        
+                        <div>
+                            Make your first post with the "add" button!
+                        </div>
+                        
+                    :
                     posts.map((element) => {
                         return (
-                            <div onClick = {() => handleClick(element.id, element.userid)}>
+                            <div className="post" onClick = {() => handleClick(element.id, element.userid)}>
                                 <BlogPost title = {element.title} username = {element.username} content = {element.content}/>
                             </div>
                         )

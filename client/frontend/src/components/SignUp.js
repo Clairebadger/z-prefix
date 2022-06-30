@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
 const SignUp = () => {
 
     let [input, setInput] = useState({firstname: "", lastname:"", username:"", password:""})
+    let navigate = useNavigate()
 
     let handleChange = (e) => {
         const value = e.target.value;
@@ -26,12 +27,13 @@ const SignUp = () => {
         .then(res =>{
             if(res.status ===200){
                 console.log("success")
+                navigate('/login')
             }
             else{
                 console.log("not success")
             }
         })
-        e.preventDefault()
+
     }
 
     return (

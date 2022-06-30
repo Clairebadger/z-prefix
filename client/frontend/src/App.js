@@ -30,6 +30,7 @@ function App() {
 
           :
           <Router>
+            <Header/>
             <Routes>
                 <Route path = '/' element ={<SignUp/>}> </Route>
                 <Route path = '/login' element ={<Login/>}> </Route>

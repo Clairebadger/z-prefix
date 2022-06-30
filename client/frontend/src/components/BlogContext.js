@@ -1,6 +1,6 @@
 import React from 'react'
 const BlogContext = React.createContext({
-    userId : 1,
+    userId : null,
     setUserId : ()=>{}
   });
 

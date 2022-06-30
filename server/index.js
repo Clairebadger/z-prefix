@@ -57,7 +57,7 @@ app.get('/posts/details/:id', (req,res) => { //all details of a single post
 /* POST REQUESTS */
 
 app.post('/post', (req, res) => { //add a post
-    if (req.body.title.length > 20 || req.body.content.length > 250){
+    if (req.body.title.length > 30 || req.body.content.length > 1000){
         console.log(req.body)
         res.send("Input too long")
     }
@@ -120,14 +120,14 @@ app.post('/login', function (req, res) {
 /* PATCH REQUESTS */
 
 app.patch('/post/:id', (req, res) => { //edit a post
-    console.log(req.body)
-    if (req.body.title.length > 20 || req.body.content.length > 250){
+    let postid = parseInt(req.params.id);
+    if (req.body.title.length > 30 || req.body.content.length > 1000){
         res.send("Input too long")
     }
     else{
         knex('post')
-            .where({ id: req.body.id })
-            .update(req.body)
+            .where({ id: postid })
+            .update(req.body, Object.keys(req.body))
             .then(data => {
                 res.status(200).json(data) //send data over if success
         })

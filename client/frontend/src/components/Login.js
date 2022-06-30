@@ -47,7 +47,7 @@ const Login = () => {
                 <ul>
                     <li className = 'list-element'>
                         <label>
-                          Email: 
+                          Username: 
                           <input type="text" name = "username" value = {input.username} onChange = {handleChange} required="required"/>
                         </label>
                     </li>

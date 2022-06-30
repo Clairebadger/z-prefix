@@ -50,7 +50,7 @@ const AddEditPost = ({action, postid}) => {
             else{
                 console.log("not success")
             }
-            //action === 'add' ? navigate('/posts') : navigate(`/posts/details/${postid}`)
+            action === 'add' ? navigate('/posts') : navigate(`/posts/details/${postid}`)
         })
         e.preventDefault()
         
@@ -76,9 +76,9 @@ const AddEditPost = ({action, postid}) => {
                           Content: 
                           {
                             action === 'add' ?
-                            <input type="text" name = "content" value = {input.content} onChange = {handleChange} required="required"/> 
+                            <input type="textarea" name = "content" value = {input.content} onChange = {handleChange} required="required"/> 
                             :
-                            <input type="text" name = "content" value = {input.content} onChange = {handleChange}/>
+                            <input type="textarea" name = "content" value = {input.content} onChange = {handleChange}/>
                           }
                           
                         </label>
