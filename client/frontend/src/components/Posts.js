@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import BlogContext from "./BlogContext";
 import BlogPost from "./BlogPost";
 import './styles/Posts.css'
-import Container from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import { Button } from "@mui/material";
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
@@ -12,12 +13,10 @@ const Posts = ({user}) => {
     let {userId} = useContext(BlogContext)
     let getUrl 
     let navigate = useNavigate()
-
     //get the posts inside useEffect. if user is true, then get it with the user id. else get them all 
     //have a post button 
 
     const handleClick = (val, user) =>{ //handle the navigations on click
-        console.log(val)
         if (val === 0){
             navigate('/posts/add')
         }
@@ -45,9 +44,9 @@ const Posts = ({user}) => {
     return (
         <div className="post-page">
             {
-                user ? <button onClick={() => handleClick(0)}>Add post</button> : <></>
+                user ? <Button variant="contained" onClick={() => handleClick(0)}>Add post</Button> : <></>
             }
-            <div className = "post-container">
+            <Grid container spacing={3} direction="row" justifyContent="space-evenly" alignItems="center">
                 {   
                     posts.length === 0 ?
                         
@@ -56,15 +55,15 @@ const Posts = ({user}) => {
                         </div>
                         
                     :
-                    posts.map((element) => {
+                    posts.map((element,index) => {
                         return (
-                            <div className="post" onClick = {() => handleClick(element.id, element.userid)}>
-                                <BlogPost title = {element.title} username = {element.username} content = {element.content}/>
-                            </div>
+                            <Grid item md={4} key={index}>
+                                <BlogPost title = {element.title} username = {element.username} content = {element.content} callback = {() => handleClick(element.id, element.userid)}/>
+                            </Grid>
                         )
                     })
                 }
-            </div>
+            </Grid>
         </div>
     )
 

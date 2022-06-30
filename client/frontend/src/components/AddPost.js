@@ -2,22 +2,14 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import config from '../config'
 import BlogContext from "./BlogContext";
+import TextField from "@mui/material/TextField";
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
-const AddEditPost = ({action, postid}) => {
+const AddPost = ({action, postid}) => {
     let {userId} = useContext(BlogContext)
     let [input, setInput] = useState({userid:userId, title: "", content:"",})
+    let [errorMsg, setErrorMsg] = useState('')
     let navigate = useNavigate()
-
-    let formatPatchReq = () =>{
-        let body = {}
-        Object.keys(input).forEach((x) => {
-            if (input[x] !== '' && input[x] !== null){
-                body[x] = input[x]
-            }
-        })
-        return body
-}
 
     let handleChange = (e) => {
         const value = e.target.value;
@@ -30,12 +22,9 @@ const AddEditPost = ({action, postid}) => {
 
     const handleSubmit = (e) =>{
         //do some things to make it work for both PATCH and POST
-        let request 
-        let body
-        let url
-        action === 'add' ? request = 'POST' : request = 'PATCH'
-        action === 'add' ? body = input : body = formatPatchReq() 
-        action === 'add' ? url = `${ApiUrl}post` : url = `${ApiUrl}post/${postid}`
+        let request = 'POST' 
+        let body = input
+        let url = `${ApiUrl}post` 
 
         fetch(url, {
             method: request,
@@ -46,11 +35,12 @@ const AddEditPost = ({action, postid}) => {
             console.log(res)
             if(res.status ===200){
                 console.log("success")
+                navigate('/posts')
             }
             else{
                 console.log("not success")
+                setErrorMsg("An Error Occured")
             }
-            action === 'add' ? navigate('/posts') : navigate(`/posts/details/${postid}`)
         })
         e.preventDefault()
         
@@ -58,29 +48,20 @@ const AddEditPost = ({action, postid}) => {
 
     return (
         <>  
-            {`${action} Blog Post`}
+            <div>{errorMsg}</div>
+            {`Add Blog Post`}
             <form onSubmit={handleSubmit}>
                 <ul>
                 <li className = 'list-element'>
                         <label>
                           Title: 
-                          {action === 'add' ? 
-                            <input type="text" name = "title" value = {input.title} onChange = {handleChange} required="required"/> 
-                            : 
-                            <input type="text" name = "title" value = {input.title} onChange = {handleChange}/>
-                        }
+                        <TextField placeholder="Title" name = "title" value = {input.title} onChange = {handleChange} required="required"/>    
                         </label>
                     </li>
                     <li className = 'list-element'>
                         <label>
                           Content: 
-                          {
-                            action === 'add' ?
-                            <input type="textarea" name = "content" value = {input.content} onChange = {handleChange} required="required"/> 
-                            :
-                            <input type="textarea" name = "content" value = {input.content} onChange = {handleChange}/>
-                          }
-                          
+                            <TextField placeholder="Content" multiline rows={4} maxRows={6}  name = "content" value = {input.content} onChange = {handleChange} required="required"/> 
                         </label>
                     </li>
                 </ul>
@@ -90,4 +71,4 @@ const AddEditPost = ({action, postid}) => {
     )
 }
 
-export default AddEditPost
+export default AddPost

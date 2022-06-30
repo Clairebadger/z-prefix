@@ -4,7 +4,7 @@ const config = {
     },
   
     production: {
-        apiUrl: "https://mini-app-1-api.herokuapp.com/"
+        apiUrl: "https://blog-z-prefix-api.herokuapp.com/"
     },
     test: {
         apiUrl: ''

@@ -1,5 +1,7 @@
 import BlogContext from "./BlogContext";
 import { useContext, useState } from "react";
+import TextField from "@mui/material/TextField";
+import { Alert } from "@mui/material";
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
@@ -8,6 +10,9 @@ const Login = () => {
 
     let {setUserId} = useContext(BlogContext)
     let [input, setInput] = useState({username:"", password:""})
+    let [alert, setAlert] = useState(false)
+    let [alertContent, setAlertContent] = useState('');
+    let [alertLevel, setAlertLevel] = useState('')
 
     let handleChange = (e) => {
         const value = e.target.value;
@@ -28,7 +33,9 @@ const Login = () => {
         })
         .then(res => {
             if (res.status !== 200){
-                console.log("not success")
+                setAlertLevel("error")
+                setAlertContent("Trouble logging in, please check your username and password");
+                setAlert(true);
             }
             return res
         })
@@ -43,18 +50,19 @@ const Login = () => {
 
     return (
         <>
+             {alert ? <Alert severity={alertLevel}>{alertContent}</Alert> : <></> }
             <form onSubmit={handleSubmit}>
                 <ul>
                     <li className = 'list-element'>
                         <label>
                           Username: 
-                          <input type="text" name = "username" value = {input.username} onChange = {handleChange} required="required"/>
+                          <TextField placeholder = 'username' name = "username" value = {input.username} onChange = {handleChange} required="required"/>
                         </label>
                     </li>
                     <li className = 'list-element'>
                         <label>
                           Password:
-                          <input type="text" name = "password" value = {input.password} onChange = {handleChange} required="required"/>
+                          <TextField type="password" placeholder = 'password' name = "password" value = {input.password} onChange = {handleChange} required="required"/>
                         </label>
                     </li>
                 </ul>

@@ -57,6 +57,7 @@ app.get('/posts/details/:id', (req,res) => { //all details of a single post
 /* POST REQUESTS */
 
 app.post('/post', (req, res) => { //add a post
+    console.log(req.body)
     if (req.body.title.length > 30 || req.body.content.length > 1000){
         console.log(req.body)
         res.send("Input too long")
@@ -75,22 +76,34 @@ app.post('/post', (req, res) => { //add a post
 })
 
 app.post('/signup', function (req, res) {
-    bcrypt.hash(req.body.password, saltRounds, function (err,   hash) {
-    knex('bloguser').insert({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        username: req.body.username,
-        password: hash
-     }).then(function(data) {
-      if (data) {
-        res.status(200)
-        res.redirect('/');
-      }
-      else{
-        res.status(404)
-      }
-    });
-   });
+    let requsername = req.body.username
+
+    knex("bloguser")
+        .select('*')
+        .where({username : requsername})
+        .then(data => {
+            if (data.length > 0){
+                res.status(300).send("username taken")
+            }
+            else{
+                bcrypt.hash(req.body.password, saltRounds, function (err,   hash) {
+                    knex('bloguser').insert({
+                        firstname: req.body.firstname,
+                        lastname: req.body.lastname,
+                        username: req.body.username,
+                        password: hash
+                     }).then(function(data) {
+                      if (data) {
+                        res.status(200)
+                        res.redirect('/');
+                      }
+                      else{
+                        res.status(404)
+                      }
+                    });
+                   });
+            }
+        })
 })
 
 app.post('/login', function (req, res) {
@@ -121,18 +134,32 @@ app.post('/login', function (req, res) {
 
 app.patch('/post/:id', (req, res) => { //edit a post
     let postid = parseInt(req.params.id);
-    if (req.body.title.length > 30 || req.body.content.length > 1000){
-        res.send("Input too long")
+    if (req.body.title){
+        if (req.body.title.length > 50){
+            res.status(400).send("Input too long")
+        }
+        else{
+            knex('post')
+                .where({ id: postid })
+                .update(req.body, Object.keys(req.body))
+                .then(data => {
+                    res.status(200).json(data) //send data over if success
+            })
+        }
     }
-    else{
-        knex('post')
-            .where({ id: postid })
-            .update(req.body, Object.keys(req.body))
-            .then(data => {
-                res.status(200).json(data) //send data over if success
-        })
+    if (req.body.content){
+        if (req.body.content.length > 10000){
+            res.status(400).send("Input too long")
+        }
+        else{
+            knex('post')
+                .where({ id: postid })
+                .update(req.body, Object.keys(req.body))
+                .then(data => {
+                    res.status(200).json(data) //send data over if success
+            })
+        }
     }
-    
 })
 
 /* DELETE REQUESTS */

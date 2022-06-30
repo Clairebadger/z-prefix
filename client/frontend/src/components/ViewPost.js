@@ -1,20 +1,31 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import BlogContext from "./BlogContext";
-import AddEditPost from "./AddEditPost";
+import { Alert } from "@mui/material";
+import EditableText from "./EditableText";
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
 const ViewPost = () => {
     let {userId} = useContext(BlogContext)
+    let [input, setInput] = useState({userid:userId, title: "", content:"",})
     let [post, setPost] = useState({id: null, title : '', author : '', content : ''})
-    let [isEdit, setIsEdit] = useState(false)
+    let [alert, setAlert] = useState(false)
+    let [alertContent, setAlertContent] = useState('');
+    let [alertLevel, setAlertLevel] = useState('')
+
     let navigate = useNavigate()
     let temp = window.location.href.split('/')
     let id = temp[temp.length-1]
 
-    let toggleEdit = () =>{
-        setIsEdit(!isEdit)
+    let formatPatchReq = () =>{
+        let body = {}
+        Object.keys(input).forEach((x) => {
+            if (input[x] !== '' && input[x] !== null){
+                body[x] = input[x]
+            }
+        })
+        return body
     }
 
     const removePost = async () => {
@@ -23,41 +34,68 @@ const ViewPost = () => {
         navigate(`/posts`)
     }
 
+    
+
+    const handleSubmit = (e) =>{
+        //do some things to make it work for both PATCH and POST
+        let request = 'PATCH'
+        let body = formatPatchReq() 
+        let url = `${ApiUrl}post/${id}`
+
+        fetch(url, {
+            method: request,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        })
+        .then(res => {
+            console.log(res)
+            if(res.status ===200){
+                setAlertLevel("success")
+                setAlertContent("Post is now changed!");
+                setAlert(true);
+                
+            }
+            else{
+                setAlertLevel("error")
+                setAlertContent("An error occurred");
+                setAlert(true);
+            }
+        })
+        e.preventDefault()
+        
+    }
+
     useEffect (()=> { //fetch the details of the post
         fetch(`${ApiUrl}posts/details/${id}`)
             .then(res => res.json())
             .then(data => {
                 setPost(data[0])
-                console.log(data[0])
             })
     },[])
 
-    //if the user is equal to the post id then the user can edit it
-
+    //if the user is equal to the post id then the user can edit it or remove it
     return (
         <>
-            {
-                userId === post.userid ? <button onClick={toggleEdit}> Edit </button> : <></>
-            }
-            {
-                userId === post.userid ? <button onClick={removePost}> Delete </button> : <></>
-            }
-            {
-                isEdit ?
-
-                <AddEditPost action='edit' postid = {id}/>
-
-                :
-                <>
-                    <h1>{post.title}</h1>
-                    <div>{post.username}</div>
-                    <div>{post.content}</div>
-                </>
-            }
+            {alert ? <Alert severity={alertLevel}>{alertContent}</Alert> : <></> }
+            {userId === post.userid ? <> <button onClick={removePost}> Delete </button> </>: <></>}
             
+            <EditableText field={"title"} val={post.title} canEdit = {userId === post.userid} callback = {setInput} input = {input}/>
+            <EditableText field={"content"} val={post.content} canEdit = {userId === post.userid} callback = {setInput} input = {input}/>
+
+            {userId === post.userid ? <> <button className = 'submitButton' onClick={handleSubmit}>Submit</button> </>: <></>}
         </>
     )
 
 }
 
 export default ViewPost
+
+/*
+Object.keys(post).map((key) => {
+                    if (key === 'title' || key === 'content'){
+                        return (
+                            <EditableText field={key} val={post[key]} canEdit = {userId === post.userid} callback = {setInput} input = {input}/>
+                        )
+                    }
+                }) 
+*/
