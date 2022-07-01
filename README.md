@@ -1,11 +1,13 @@
 # z-prefix
 # A few added features:
 
-Data validation:
--Does not allow duplicate usernames
--passwords must be at least 8 characters in length with letters and numbers
--All fields are required for sign up and create post
--Max characters for fields are checked by the server, error status is sent if user tries to input more
+Does not allow duplicate usernames
+
+passwords must be at least 8 characters in length with letters and numbers
+
+All fields are required for sign up and create post
+
+Max characters for fields are checked by the server, error status is sent if user tries to input more
 
 Logout button!
 
