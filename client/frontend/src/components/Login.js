@@ -1,6 +1,11 @@
 import BlogContext from "./BlogContext";
 import { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import Typography from "@mui/material/Typography";
 import { Alert } from "@mui/material";
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
@@ -49,26 +54,19 @@ const Login = () => {
     }
 
     return (
-        <>
+        <Container maxWidth="lg" className="post-page" sx={{ height:"100%", background:"#E9F3EB" }}>
              {alert ? <Alert severity={alertLevel}>{alertContent}</Alert> : <></> }
             <form onSubmit={handleSubmit}>
-                <ul>
-                    <li className = 'list-element'>
-                        <label>
-                          Username: 
-                          <TextField placeholder = 'username' name = "username" value = {input.username} onChange = {handleChange} required="required"/>
-                        </label>
-                    </li>
-                    <li className = 'list-element'>
-                        <label>
-                          Password:
-                          <TextField type="password" placeholder = 'password' name = "password" value = {input.password} onChange = {handleChange} required="required"/>
-                        </label>
-                    </li>
-                </ul>
-                <button className = 'submitButton' type="submit" value="Submit">Submit</button>
+                <Box m={2} pt={3}>
+                <Grid container spacing={3} direction="column" alignItems="center" justifyContent="space-evenly">
+                    <Box m={2} pt={3}><Typography>Please login to make your own content!</Typography></Box>
+                    <Box m={1}><TextField label = 'Username' name = "username" value = {input.username} onChange = {handleChange} required="required"/></Box>
+                    <Box m={1}><TextField label = 'Password' type="password" name = "password" value = {input.password} onChange = {handleChange} required="required"/></Box>
+                    <Box m={2} pt={3}></Box><Button className = 'submitButton' type="submit" value="Submit">Submit</Button>
+                </Grid>
+                </Box>
             </form>
-        </>
+        </Container>
     )
 }
 

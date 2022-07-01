@@ -4,6 +4,8 @@ import BlogContext from "./BlogContext";
 import BlogPost from "./BlogPost";
 import './styles/Posts.css'
 import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
 import { Button } from "@mui/material";
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
@@ -42,10 +44,12 @@ const Posts = ({user}) => {
     },[user])
 
     return (
-        <div className="post-page">
-            {
-                user ? <Button variant="contained" onClick={() => handleClick(0)}>Add post</Button> : <></>
-            }
+        <>
+        {
+            user ? <Box m={2} pt={3}><Button variant="contained" onClick={() => handleClick(0)}>Add post</Button></Box> : <></>
+        }
+        <Container spacing={24} maxWidth="lg" className="post-page">
+            
             <Grid container spacing={3} direction="row" justifyContent="space-evenly" alignItems="center">
                 {   
                     posts.length === 0 ?
@@ -64,7 +68,8 @@ const Posts = ({user}) => {
                     })
                 }
             </Grid>
-        </div>
+        </Container>
+        </>
     )
 
 }

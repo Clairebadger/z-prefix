@@ -2,6 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import BlogContext from "./BlogContext";
 import { Alert } from "@mui/material";
+import Container from "@mui/material/Container"
+import Button from "@mui/material/Button"
+import Grid from "@mui/material/Grid"
+import Box from "@mui/material/Box"
 import EditableText from "./EditableText";
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
@@ -75,27 +79,19 @@ const ViewPost = () => {
 
     //if the user is equal to the post id then the user can edit it or remove it
     return (
-        <>
+        <Container maxWidth="lg" className="post-page" sx={{ height:"100%", background:"#E9F3EB" }}>
             {alert ? <Alert severity={alertLevel}>{alertContent}</Alert> : <></> }
-            {userId === post.userid ? <> <button onClick={removePost}> Delete </button> </>: <></>}
+            {userId === post.userid ? <> <Box m={2} pt={3}><Button variant = "outlined" onClick={removePost}> Delete </Button></Box> </>: <></>}
             
-            <EditableText field={"title"} val={post.title} canEdit = {userId === post.userid} callback = {setInput} input = {input}/>
-            <EditableText field={"content"} val={post.content} canEdit = {userId === post.userid} callback = {setInput} input = {input}/>
+            <Grid container spacing={3} direction="column" alignItems="center" justifyContent="space-evenly">
+                <Box m={2} pt={3}><EditableText field={"title"} val={post.title} canEdit = {userId === post.userid} callback = {setInput} input = {input}/></Box>
+                <Box m={2} pt={3}><EditableText field={"content"} val={post.content} canEdit = {userId === post.userid} callback = {setInput} input = {input}/></Box>
 
-            {userId === post.userid ? <> <button className = 'submitButton' onClick={handleSubmit}>Submit</button> </>: <></>}
-        </>
+                {userId === post.userid ? <> <Box m={10} pt={3}><Button variant = "outlined" className = 'submitButton' onClick={handleSubmit}>Submit</Button></Box> </>: <></>}
+            </Grid>
+        </Container>
     )
 
 }
 
 export default ViewPost
-
-/*
-Object.keys(post).map((key) => {
-                    if (key === 'title' || key === 'content'){
-                        return (
-                            <EditableText field={key} val={post[key]} canEdit = {userId === post.userid} callback = {setInput} input = {input}/>
-                        )
-                    }
-                }) 
-*/

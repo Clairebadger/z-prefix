@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import BlogContext from "./BlogContext";
+import Box from '@mui/material/Box'
 import "./styles/Header.css";
 import Button from '@mui/material/Button';
 
@@ -26,21 +26,21 @@ const Header = () => {
             userId !== null ?
                 <div className='header'>
                     <div className="logout">
-                        <Button variant="contained" onClick={handleLogout}> logout </Button>    
+                    <Box m={2} pt={3} maxWidth='30'><Button variant="contained" onClick={handleLogout}> logout </Button></Box>  
                     </div>
                 <div  className="navButtons">    
-                    <Button variant="contained" onClick = {()=>handleClick('/posts')}> My Posts </Button>
-                    <Button variant="contained" onClick = {()=>handleClick('/all')}> All Posts </Button>
+                    <Box m={2} pt={3}><Button variant="contained" onClick = {()=>handleClick('/posts')}> My Posts </Button></Box>
+                    <Box m={2} pt={3}><Button variant="contained" onClick = {()=>handleClick('/all')}> All Posts </Button></Box>
                 </div>
             </div>
             :
             <div className='header'>
-                <div  className="navButtons">    
-                    <Button variant="contained" onClick = {()=>handleClick('/login')}> Login </Button>
-                    <Button variant="contained" onClick = {()=>handleClick('/')}> Sign Up </Button>
-                    <Button variant="contained" onClick = {()=>handleClick('/posts')}> View Posts </Button>
+                 <div  className="navButtons">
+                    <Box m={2} pt={3}><Button variant="contained" onClick = {()=>handleClick('/login')}> Login </Button></Box>
+                    <Box m={2} pt={3}><Button variant="contained" onClick = {()=>handleClick('/')}> Sign Up </Button></Box>
+                    <Box m={2} pt={3}><Button variant="contained" onClick = {()=>handleClick('/posts')}> View Posts </Button></Box>
                 </div>
-        </div>
+            </div>
         }
         </>
         
