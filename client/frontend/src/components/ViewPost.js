@@ -81,7 +81,7 @@ const ViewPost = () => {
 
     //if the user is equal to the post id then the user can edit it or remove it
     return (
-        <Container maxWidth="lg" className="post-page" sx={{marginBottom:"0", background:"#E9F3EB", boxShadow:"0 0 10px rgb(10, 31, 10)", borderRadius:"5px"}}>
+        <Container className="post-page" position="absolute" sx={{background:"#E9F3EB", boxShadow:"0 0 10px rgb(10, 31, 10)", borderRadius:"5px"}}>
             {alert ? <Alert severity={alertLevel}>{alertContent}</Alert> : <></> }
             {userId === post.userid ? <> <Box m={2} pt={3}><Button variant = "outlined" onClick={removePost}> Delete </Button></Box> </>: <></>}
             

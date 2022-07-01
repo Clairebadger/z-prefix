@@ -7,10 +7,12 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import { Button } from "@mui/material";
+import {CircularProgress} from "@mui/material";
 import config from '../config'
 const ApiUrl = config[process.env.REACT_APP_NODE_ENV || "development"].apiUrl;
 
 const Posts = ({user}) => {
+    const [isLoading, setIsLoading] = useState(false);
     let [posts, setPosts] = useState([])
     let {userId} = useContext(BlogContext)
     let getUrl 
@@ -30,12 +32,13 @@ const Posts = ({user}) => {
 
     useEffect(()=>{ 
         user ? getUrl = `${ApiUrl}posts/${userId}` : getUrl = `${ApiUrl}posts`
-        console.log(getUrl)
+        setIsLoading(true);
         fetch(getUrl)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
                 setPosts(data)
+                setIsLoading(false);
                 if (user){
                     console.log(userId)
                 }
@@ -44,6 +47,15 @@ const Posts = ({user}) => {
     },[user])
 
     return (
+        <>
+        {
+        isLoading ?
+
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+            <CircularProgress/>
+        </div>
+
+        :
         <>
         {
             user ? <Box m={2} pt={3}><Button variant="contained" onClick={() => handleClick(0)}>Add post</Button></Box> : <></>
@@ -69,6 +81,8 @@ const Posts = ({user}) => {
                 }
             </Grid>
         </Container>
+        </>
+        }
         </>
     )
 
