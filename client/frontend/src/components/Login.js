@@ -30,7 +30,6 @@ const Login = () => {
 
     const handleSubmit = (e) =>{
         
-        console.log("working...?")
         fetch(`${ApiUrl}login`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
@@ -54,12 +53,12 @@ const Login = () => {
     }
 
     return (
-        <Container maxWidth="lg" className="post-page" sx={{ height:"100%", background:"#E9F3EB" }}>
+        <Container maxWidth="lg" className="post-page" sx={{marginBottom:"0", background:"#E9F3EB", boxShadow:"0 0 10px rgb(10, 31, 10)", borderRadius:"5px"}}>
              {alert ? <Alert severity={alertLevel}>{alertContent}</Alert> : <></> }
             <form onSubmit={handleSubmit}>
                 <Box m={2} pt={3}>
                 <Grid container spacing={3} direction="column" alignItems="center" justifyContent="space-evenly">
-                    <Box m={2} pt={3}><Typography>Please login to make your own content!</Typography></Box>
+                    <Box m={2} pt={3}><Typography variant='h5'>Please login to make your own content!</Typography></Box>
                     <Box m={1}><TextField label = 'Username' name = "username" value = {input.username} onChange = {handleChange} required="required"/></Box>
                     <Box m={1}><TextField label = 'Password' type="password" name = "password" value = {input.password} onChange = {handleChange} required="required"/></Box>
                     <Box m={2} pt={3}></Box><Button className = 'submitButton' type="submit" value="Submit">Submit</Button>

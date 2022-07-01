@@ -9,12 +9,14 @@ const MAX_LENGTH = 100;
 
 
 const BlogPost = (props) => {
+    console.log(props)
     const card = (
         <>
+            <Box m={1}><Typography align = 'right' sx={{ fontSize: 10 }} color="text.secondary">
+                date: {props.date}
+            </Typography></Box>
           <CardContent>
-            <Typography variant="h5">
-                {props.title}
-            </Typography>
+            <Typography variant="h5">{props.title}</Typography>
             <Typography variant="body">
             {
                 props.content.length > MAX_LENGTH ?
@@ -36,7 +38,7 @@ const BlogPost = (props) => {
       );
     return  (
         <Box sx={{ maxWidth: 300, minWidth: 300, minHeight: 180 }}>
-            <Card variant="outlined">{card}</Card>
+            <Card variant="outlined" raised='true' color="background.secondary">{card}</Card>
         </Box>
     )
 }

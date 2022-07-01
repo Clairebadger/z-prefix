@@ -62,7 +62,7 @@ const Posts = ({user}) => {
                     posts.map((element,index) => {
                         return (
                             <Grid item md={4} key={index}>
-                                <BlogPost title = {element.title} username = {element.username} content = {element.content} callback = {() => handleClick(element.id, element.userid)}/>
+                                <BlogPost title = {element.title} username = {element.username} date={element.date} content = {element.content} callback = {() => handleClick(element.id, element.userid)}/>
                             </Grid>
                         )
                     })

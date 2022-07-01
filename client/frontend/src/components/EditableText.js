@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { TextField } from "@mui/material";
+import { Grid } from "@mui/material";
+import { Box } from "@mui/material";
 /*NOTE: I took some time to learn MUI but I am also still learning so I used this page as a resource for this component:
 https://codesandbox.io/s/flamboyant-stonebraker-le1eq?file=/index.js
 */
@@ -8,10 +11,12 @@ https://codesandbox.io/s/flamboyant-stonebraker-le1eq?file=/index.js
 const EditableText = (props) => {
     let [isEdit, setIsEdit] = useState(false)
     let [value, setValue] = useState(props.val);
+    let [typography, setTypography] = useState("")
     
 
     useEffect(()=>{
         setValue(props.val)
+        props.field === "title" ? setTypography('h4') : props.field === "username" ? setTypography("subtitle2") : props.field === "content" ? setTypography ('body1') : setTypography('subtitle2')
     },[props.val])
 
     let toggleEdit = () =>{
@@ -32,24 +37,22 @@ const EditableText = (props) => {
     }
 
     return (
-        <>
-        {   isEdit ?
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    <input className="MuiTypography-root MuiTypography-h4 MuiTypography-displayInline" value={value} onChange={(e) => setValue(e.target.value)}/>
-                    <Typography style={{ display: "none" }} />
+        <Box m={2} p={1}>
+            {isEdit ?
+                <Grid container spacing={1} direction="column" alignItems="center" justifyContent="space-around">
+                    {props.field === 'content' ? 
+                        <TextField  defaultValue={props.val} minWith="lg" multiline rows={10} maxRows={15} value={value} onChange={(e) => setValue(e.target.value)}/> 
+                        :   
+                        <TextField  defaultValue={props.val}  value={value} onChange={(e) => setValue(e.target.value)}/>}
                     <Button size="small" onClick={handleClick}> Done </Button>
-                </div>
-
+                </Grid>
             :
-            <div >
-                <Typography style={{ display: "flex", alignItems: "center" }}>{value}</Typography>
-                {props.canEdit ? <Button size="small" onClick={toggleEdit}>Edit</Button> : <></>}
-            </div>
-            
-        }
-        {console.log(value)}
-        {console.log(props.val)}
-    </>);
+                <Grid container spacing={1} direction="column" alignItems="center" justifyContent="space-evenly">
+                    <Typography variant = {typography} style={{ fontFamily: 'Monospace'}}>{props.field === "username" ? `Author: ${value}` : value}</Typography>
+                    {props.canEdit ? <Button size="small" onClick={toggleEdit}>Edit</Button> : <></>}
+                </Grid>   
+            }
+    </Box>);
 }
 
 export default EditableText

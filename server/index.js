@@ -26,7 +26,7 @@ app.get('/', (req,res) => {
 app.get('/posts', (req,res) => { //all posts
     knex('bloguser')
         .join('post', 'bloguser.id', 'post.userid')
-        .select('post.id', 'userid', 'username', 'title', 'content')
+        .select('post.id', 'userid', 'username', 'title', 'content', 'date')
         .then(data => {
             res.send(data)
         })
@@ -36,7 +36,7 @@ app.get('/posts/:id', (req,res) => { //all posts created by user
     let user_id = parseInt(req.params.id);
     knex('bloguser')
         .join('post', 'bloguser.id', 'post.userid')
-        .select('post.id', 'userid', 'username', 'title', 'content')
+        .select('post.id', 'userid', 'username', 'title', 'content', 'date')
         .where({userid : user_id})
         .then(data => {
             res.status(200).send(data)
@@ -47,7 +47,7 @@ app.get('/posts/details/:id', (req,res) => { //all details of a single post
     let post_id = parseInt(req.params.id);
     knex('bloguser')
         .join('post', 'bloguser.id', 'post.userid')
-        .select('post.id', 'userid', 'username', 'title', 'content')
+        .select('post.id', 'userid', 'username', 'title', 'content', 'date')
         .where({'post.id' : post_id})
         .then(data => {
             res.status(200).send(data)
@@ -67,6 +67,7 @@ app.post('/post', (req, res) => { //add a post
         .insert({
             userid : req.body.userid,
             title: req.body.title,
+            date: req.body.date,
             content: req.body.content
         })
         .returning(Object.keys(req.body))
@@ -133,32 +134,29 @@ app.post('/login', function (req, res) {
 /* PATCH REQUESTS */
 
 app.patch('/post/:id', (req, res) => { //edit a post
+
+    let longInput = false
     let postid = parseInt(req.params.id);
+
     if (req.body.title){
         if (req.body.title.length > 50){
+            longInput = true
             res.status(400).send("Input too long")
-        }
-        else{
-            knex('post')
-                .where({ id: postid })
-                .update(req.body, Object.keys(req.body))
-                .then(data => {
-                    res.status(200).json(data) //send data over if success
-            })
         }
     }
     if (req.body.content){
         if (req.body.content.length > 10000){
+            longInput = true
             res.status(400).send("Input too long")
         }
-        else{
-            knex('post')
-                .where({ id: postid })
-                .update(req.body, Object.keys(req.body))
-                .then(data => {
-                    res.status(200).json(data) //send data over if success
-            })
-        }
+    }
+    if(!longInput){
+        knex('post')
+            .where({ id: postid })
+            .update(req.body, Object.keys(req.body))
+            .then(data => {
+                res.status(200).json(data) //send data over if success
+        })
     }
 })
 

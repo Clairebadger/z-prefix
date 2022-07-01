@@ -25,10 +25,9 @@ const Header = () => {
         {
             userId !== null ?
                 <div className='header'>
-                    <div className="logout">
-                    <Box m={2} pt={3} maxWidth='30'><Button variant="contained" onClick={handleLogout}> logout </Button></Box>  
-                    </div>
+                    
                 <div  className="navButtons">    
+                    <Box m={2} pt={3}><Button variant="contained" onClick={handleLogout}> logout </Button></Box>  
                     <Box m={2} pt={3}><Button variant="contained" onClick = {()=>handleClick('/posts')}> My Posts </Button></Box>
                     <Box m={2} pt={3}><Button variant="contained" onClick = {()=>handleClick('/all')}> All Posts </Button></Box>
                 </div>

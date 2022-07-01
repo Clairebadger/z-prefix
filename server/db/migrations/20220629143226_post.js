@@ -8,6 +8,7 @@ exports.up = function(knex) {
         table.integer('userid');
         table.foreign('userid').references('bloguser.id');
         table.string('title', 50);
+        table.string('date', 12);
         table.string('content', 10000);
       })
 };

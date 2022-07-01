@@ -11,7 +11,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
-    type: 'dark',
     primary: {
       main: '#45a88b',
     },
@@ -19,6 +18,16 @@ const theme = createTheme({
       main: '#355658',
     },
   },
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        body: {
+          backgroundColor: '#012e23',
+          backgroundImage: "url(https://www.transparenttextures.com/patterns/black-twill.png)"
+        }
+      }
+    }
+  }
 });
 
 function App() {
@@ -26,9 +35,9 @@ function App() {
   let[userId, setUserId] = useState(null)
 
   return (
+    <ThemeProvider theme = {theme}>
     <div className="App">
       <BlogContext.Provider value = {{userId, setUserId}}>
-      <ThemeProvider theme = {theme}>
       {
         userId !== null ?
             <Router>
@@ -36,7 +45,7 @@ function App() {
               <Routes>
                 <Route path = '/all' element ={<Posts user = {false}/>}> </Route>
                 <Route path = '/posts/details/:id' element ={<ViewPost/>}> </Route>
-                <Route path = '/posts/add' element ={<AddPost action='add'/>}> </Route>
+                <Route path = '/posts/add' element ={<AddPost/>}> </Route>
                 <Route path = '/posts' element = {<Posts user = {true}/>}></Route>
                 <Route path = '/*' element = {<Posts user = {true}/>}></Route>
               </Routes>
@@ -54,9 +63,9 @@ function App() {
           </Routes>
         </Router>
       }
-      </ThemeProvider>
       </BlogContext.Provider>
     </div>
+    </ThemeProvider>
   );
 }
 

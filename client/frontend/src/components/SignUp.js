@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import { Alert } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -58,13 +58,13 @@ const SignUp = () => {
     }
 
     return (
-        <Container maxWidth="lg" className="post-page" sx={{ height:"100%", background:"#E9F3EB" }}>
+        <Container maxWidth="lg" className="post-page" sx={{marginBottom:"0", background:"#E9F3EB", boxShadow:"0 0 10px rgb(10, 31, 10)", borderRadius:"5px"}}>
             {alert ? <Alert severity={alertLevel}>{alertContent}</Alert> : <></> }
             
             <form onSubmit={handleSubmit}>
                 <Box m={2} pt={3}>
                 <Grid container spacing={3} direction="column" alignItems="center" justifyContent="space-evenly">
-                        <Box m={2} pt={3}><Typography>Welcome! If you aren't a current user we'd love you to join the community!</Typography></Box>
+                        <Box m={2} pt={3}><Typography variant='h5'>Welcome! If you aren't a current user we'd love you to join the community!</Typography></Box>
                         <Box m={1}><TextField label = 'First Name' name = "firstname" value = {input.firstname} onChange = {handleChange} required="required"/></Box>
                         <Box m={1}><TextField label = 'Last Name' name = "lastname" value = {input.lastname} onChange = {handleChange} required="required"/></Box>
                         <Box m={1}><TextField label = 'Username' name = "username" value = {input.username} onChange = {handleChange} required="required"/></Box>

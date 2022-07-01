@@ -20,7 +20,7 @@ const ViewPost = () => {
 
     let navigate = useNavigate()
     let temp = window.location.href.split('/')
-    let id = temp[temp.length-1]
+    let postid = temp[temp.length-1]
 
     let formatPatchReq = () =>{
         let body = {}
@@ -29,11 +29,13 @@ const ViewPost = () => {
                 body[x] = input[x]
             }
         })
+        body.id = postid
+        console.log(body)
         return body
     }
 
     const removePost = async () => {
-        await fetch(`${ApiUrl}post/${id}`, { method: 'DELETE' })
+        await fetch(`${ApiUrl}post/${postid}`, { method: 'DELETE' })
             .then(() => console.log('Delete successful'))
         navigate(`/posts`)
     }
@@ -44,7 +46,7 @@ const ViewPost = () => {
         //do some things to make it work for both PATCH and POST
         let request = 'PATCH'
         let body = formatPatchReq() 
-        let url = `${ApiUrl}post/${id}`
+        let url = `${ApiUrl}post/${postid}`
 
         fetch(url, {
             method: request,
@@ -70,7 +72,7 @@ const ViewPost = () => {
     }
 
     useEffect (()=> { //fetch the details of the post
-        fetch(`${ApiUrl}posts/details/${id}`)
+        fetch(`${ApiUrl}posts/details/${postid}`)
             .then(res => res.json())
             .then(data => {
                 setPost(data[0])
@@ -79,15 +81,16 @@ const ViewPost = () => {
 
     //if the user is equal to the post id then the user can edit it or remove it
     return (
-        <Container maxWidth="lg" className="post-page" sx={{ height:"100%", background:"#E9F3EB" }}>
+        <Container maxWidth="lg" className="post-page" sx={{marginBottom:"0", background:"#E9F3EB", boxShadow:"0 0 10px rgb(10, 31, 10)", borderRadius:"5px"}}>
             {alert ? <Alert severity={alertLevel}>{alertContent}</Alert> : <></> }
             {userId === post.userid ? <> <Box m={2} pt={3}><Button variant = "outlined" onClick={removePost}> Delete </Button></Box> </>: <></>}
             
-            <Grid container spacing={3} direction="column" alignItems="center" justifyContent="space-evenly">
-                <Box m={2} pt={3}><EditableText field={"title"} val={post.title} canEdit = {userId === post.userid} callback = {setInput} input = {input}/></Box>
-                <Box m={2} pt={3}><EditableText field={"content"} val={post.content} canEdit = {userId === post.userid} callback = {setInput} input = {input}/></Box>
-
-                {userId === post.userid ? <> <Box m={10} pt={3}><Button variant = "outlined" className = 'submitButton' onClick={handleSubmit}>Submit</Button></Box> </>: <></>}
+            <Grid container direction="column" alignItems="center" justifyContent="space-evenly">
+                <Box m={1}><EditableText field={"title"} val={post.title} canEdit = {userId === post.userid} callback = {setInput} input = {input}/></Box>
+                <Box><EditableText field={"username"} val={post.username} canEdit = {false} callback = {setInput} input = {input}/></Box>
+                <Box><EditableText field={"date"} val={post.date} canEdit = {false} callback = {setInput} input = {input}/></Box>
+                <Box m={1} pt={1}><EditableText field={"content"} val={post.content} canEdit = {userId === post.userid} callback = {setInput} input = {input}/></Box>
+                {userId === post.userid ? <> <Box m={5} pt={3}><Button variant = "outlined" className = 'submitButton' onClick={handleSubmit}>Submit</Button></Box> </>: <></>}
             </Grid>
         </Container>
     )
