@@ -52,6 +52,17 @@ const SignUp = () => {
                     setAlertContent("Username is taken");
                     setAlert(true);
                 }
+                else if (res.status === 400){
+                    console.log("not success")
+                    setAlertLevel("error")
+                    setAlertContent("Too many characters in one of your input fields");
+                    setAlert(true);
+                }
+                else{
+                    setAlertLevel("error")
+                    setAlertContent("An Error occurred");
+                    setAlert(true);
+                }
             })
         }
         e.preventDefault()

@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import BlogContext from './components/BlogContext';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
@@ -33,6 +33,14 @@ const theme = createTheme({
 function App() {
   
   let[userId, setUserId] = useState(null)
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      console.log(foundUser)
+    }
+  }, []);
 
   return (
     <ThemeProvider theme = {theme}>

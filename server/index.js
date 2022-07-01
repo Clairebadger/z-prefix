@@ -60,7 +60,7 @@ app.post('/post', (req, res) => { //add a post
     console.log(req.body)
     if (req.body.title.length > 30 || req.body.content.length > 1000){
         console.log(req.body)
-        res.send("Input too long")
+        res.status(400).send("Input too long")
     }
     else{
         knex('post')
@@ -78,7 +78,11 @@ app.post('/post', (req, res) => { //add a post
 
 app.post('/signup', function (req, res) {
     let requsername = req.body.username
-
+    if (req.body.firstname.length > 30 || req.body.lastname.length > 30 || req.body.username.length > 30 || req.body.password.length > 250){
+        longInput = true
+        res.status(400).send("Input too long")
+    }
+    else{
     knex("bloguser")
         .select('*')
         .where({username : requsername})
@@ -105,30 +109,39 @@ app.post('/signup', function (req, res) {
                    });
             }
         })
+    }
 })
 
 app.post('/login', function (req, res) {
-    knex('bloguser')
-    .where({username: req.body.username})
-    .select('*')
-    .then(user =>  {
-        user = user[0]
-        
-        if (user ===  undefined) {
-            res.status(400).send('Cannot find user')
-        } else {
-            bcrypt.compare(req.body.password, user.password)
-                .then (function(result) {
-                    if(result){
-                        res.json({body:user.id})
-                        //res.status(200).send("success")
-                    }
-                    else{
-                        res.status(404).send("cannot login user")
-                    }
-                })
-        }
-    });
+    
+    let longInput = false
+    if (req.body.username.length > 30 || req.body.password.length > 250){
+        longInput = true
+        res.status(401).send("Input too long")
+    }
+    else{
+        knex('bloguser')
+        .where({username: req.body.username})
+        .select('*')
+        .then(user =>  {
+            user = user[0]
+            
+            if (user ===  undefined) {
+                res.status(400).send('Cannot find user')
+            } else {
+                bcrypt.compare(req.body.password, user.password)
+                    .then (function(result) {
+                        if(result){
+                            res.json({body:user.id})
+                            //res.status(200).send("success")
+                        }
+                        else{
+                            res.status(404).send("cannot login user")
+                        }
+                    })
+            }
+        });
+    }
 });
 
 /* PATCH REQUESTS */

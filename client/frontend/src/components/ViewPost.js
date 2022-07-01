@@ -63,7 +63,7 @@ const ViewPost = () => {
             }
             else{
                 setAlertLevel("error")
-                setAlertContent("An error occurred");
+                setAlertContent("An error occurred. Try checking your input size");
                 setAlert(true);
             }
         })

@@ -38,7 +38,7 @@ const BlogPost = (props) => {
       );
     return  (
         <Box sx={{ maxWidth: 300, minWidth: 300, minHeight: 180 }}>
-            <Card variant="outlined" raised='true' color="background.secondary">{card}</Card>
+            <Card variant="outlined" >{card}</Card>
         </Box>
     )
 }

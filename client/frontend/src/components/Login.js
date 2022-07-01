@@ -47,6 +47,7 @@ const Login = () => {
         .then(data => {
             console.log(data.body)
             setUserId(data.body)
+            localStorage.setItem('user', data.body)
             console.log("success")
         })
         e.preventDefault()
